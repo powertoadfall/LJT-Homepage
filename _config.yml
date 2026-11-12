@@ -75,7 +75,6 @@ social:
 include:
   - .htaccess
   - _pages
-  - files
 
 exclude:
   - "*.sublime-project"
@@ -95,9 +94,18 @@ exclude:
   - config
   - Dockerfile
   - docker-compose.yaml
+  - files
   - Gemfile
   - Gruntfile.js
   - gulpfile.js
+  - images/500x300.png
+  - images/bio-photo-2.jpg
+  - images/bio-photo.jpg
+  - images/editing-talk.png
+  - images/og-image.png
+  - images/profile.png
+  - images/themes
+  - images/wiki
   - LICENSE
   - local
   - log
