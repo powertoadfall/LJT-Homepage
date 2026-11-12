@@ -1,0 +1,64 @@
+name: One-time personal template cleanup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Remove unused template content
+        run: |
+          set -euo pipefail
+
+          # Remove the five sample publication records.
+          git rm -f \
+            _publications/2009-10-01-paper-title-number-1.md \
+            _publications/2010-10-01-paper-title-number-2.md \
+            _publications/2015-10-01-paper-title-number-3.md \
+            _publications/2024-02-17-paper-title-number-4.md \
+            _publications/2025-06-08-paper-title-number-5.md
+
+          # Remove sample collections that are not used by the personal site.
+          rm -rf _posts _talks _teaching _portfolio _drafts
+
+          # Remove template and sample pages not used by About/Publications.
+          rm -f \
+            _pages/archive-layout-with-content.md \
+            _pages/category-archive.html \
+            _pages/collection-archive.html \
+            _pages/cv.md \
+            _pages/markdown.md \
+            _pages/non-menu-page.md \
+            _pages/page-archive.html \
+            _pages/portfolio.html \
+            _pages/tag-archive.html \
+            _pages/talkmap.html \
+            _pages/talks.html \
+            _pages/teaching.html \
+            _pages/terms.md \
+            _pages/year-archive.html
+
+          # Remove template automation unrelated to site deployment, including this workflow.
+          rm -f \
+            .github/workflows/bad-pr.yml \
+            .github/workflows/cleanup-personal-template.yml \
+            .github/workflows/lock-closed-cron.yml \
+            .github/workflows/scrape_talks.yml
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No cleanup changes were needed."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Remove unused template pages and sample content"
+            git push origin HEAD:master
+          fi
